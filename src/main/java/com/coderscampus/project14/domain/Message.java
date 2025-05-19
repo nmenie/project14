@@ -1,18 +1,21 @@
 package com.coderscampus.project14.domain;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
+
     private String content;
     private String sender;
-    private String channel; // e.g., "general", more channels can be added later
+    private String channel;
     private LocalDateTime timestamp = LocalDateTime.now();
 
     public Message() {}
@@ -24,46 +27,28 @@ public class Message {
         this.timestamp = LocalDateTime.now();
     }
 
-    // Getters and setters
+    // Getters and setters...
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public String getContent() {
-        return content;
-    }
+    public String getSender() { return sender; }
+    public void setSender(String sender) { this.sender = sender; }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+    public String getChannel() { return channel; }
+    public void setChannel(String channel) { this.channel = channel; }
 
-    public String getSender() {
-        return sender;
-    }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public String getChannel() {
-        return channel;
-    }
-
-    public void setChannel(String channel) {
-        this.channel = channel;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    @Transient
+    @JsonGetter("formattedTimestamp")
+    public String getFormattedTimestamp() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        return timestamp != null ? timestamp.format(formatter) : "";
     }
 
     @Override
@@ -77,3 +62,4 @@ public class Message {
                 '}';
     }
 }
+
